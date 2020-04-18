@@ -1,0 +1,59 @@
+<div class="todo">
+  <h1 class="todo__title">Todo App</h1>
+
+  <form
+    class="form todo__form"
+    (ngSubmit)="add()"
+    [formGroup]="form"
+  >
+    <input
+      type="text"
+      class="form__input"
+      placeholder="Новая задача"
+      formControlName="title"
+    >
+    <input
+      type="submit"
+      class="form__submit"
+      value="Добавить"
+      (click)="add()"
+      [disabled]="form.invalid"
+    >
+  </form>
+
+  <ul
+    class="todo__list"
+    *ngIf="todoService.todoList.length; else noItems"
+  >
+    <li
+      class="todo-item"
+      *ngFor="let todo of todoService.todoList | title; let i = index"
+      [class.todo-item--done]="todo.done"
+    >
+      <input
+        type="checkbox"
+        class="todo-item__checkbox"
+        [checked]="todo.done"
+        (change)="toggleCompleted(todo.id)"
+      >
+      <input
+        type="text"
+        value="{{ todo.title }}"
+        class="todo-item__title"
+        [disabled]="todo.done"
+        [(ngModel)]="todo.title"
+        (click)="prepareToEdit(todo)"
+        (blur)="edit(todo)"
+        (keydown.enter)="edit(todo)"
+      >
+      <button
+        class="todo-item__remove"
+        (click)="remove(todo.id)"
+      >удалить
+      </button>
+    </li>
+  </ul>
+  <ng-template #noItems>
+    <p>Сейчас нет задач...</p>
+  </ng-template>
+</div>
